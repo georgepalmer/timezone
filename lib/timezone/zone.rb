@@ -48,6 +48,7 @@ module Timezone
     # offset in the timezone rules. Once the offset has been found that offset is added to the reference UTC time
     # to calculate the reference time in the timezone.
     def time reference
+      reference = reference.to_time unless reference.is_a?(Time)
       reference.utc + rule_for_reference(reference)['offset']
     end
 
