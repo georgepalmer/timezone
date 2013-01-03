@@ -34,7 +34,7 @@ module Timezone
 
       data = Zone.get_zone_data(options[:zone])
 
-      @rules = data['zone']
+      @rules = data['zone'].map{|i| i.merge("_from" => _parsetime(i["_from"]), "_to" => _parsetime(i["_to"]))}
       @zone = data['_zone'] || options[:zone]
     end
 
