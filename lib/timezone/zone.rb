@@ -51,6 +51,11 @@ module Timezone
       reference = reference.to_time unless reference.is_a?(Time)
       reference.utc + rule_for_reference(reference)['offset']
     end
+    
+    def utc_time_from_local reference
+      reference = reference.to_time unless reference.is_a?(Time)
+      reference.utc - rule_for_reference(reference)['offset']
+    end
 
     # Get the current UTC offset in seconds for this timezone.
     #
