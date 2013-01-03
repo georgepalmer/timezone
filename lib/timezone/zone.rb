@@ -69,14 +69,21 @@ module Timezone
     end
 
     class << self
-
-      # Retrieve the data from a particular time zone
+      
       def get_zone_data(zone)
-        file = File.join(ZONE_FILE_PATH, "#{zone}.json")
-        begin
-          return JSON.parse(open(file).read)
-        rescue
-          raise Timezone::Error::InvalidZone, "'#{zone}' is not a valid zone."
+        if @files && @files[zone]
+          @files[zone]
+        else
+          @files ||= {}
+          file = File.join(ZONE_FILE_PATH, "#{zone}.json")
+          begin
+            f = File.open(file, File::RDONLY)
+            return @files[zone] = JSON.parse(f.read)
+          rescue
+            raise Timezone::Error::InvalidZone, "'#{zone}' is not a valid zone."
+          ensure
+            f.close() if f
+          end
         end
       end
 
